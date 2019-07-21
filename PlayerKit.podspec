@@ -31,11 +31,12 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'PlayerKit/PlayerKit/Classes/**/*'
-  
-  s.resource_bundles = {
-    'PlayerKit' => ['PlayerKit/PlayerKit/Assets/*.xcassets',
+  s.resources = ['PlayerKit/PlayerKit/Assets/*.xcassets',
 	'PlayerKit/PlayerKit/Assets/*.storyboard']
-  }
+	
+  # s.resource_bundles = {
+  #   'PlayerKit' =>
+  # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'AVFoundation'
