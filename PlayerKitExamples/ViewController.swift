@@ -20,11 +20,11 @@ class ViewController: UIViewController {
         
         let asset = AVURLAsset(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")!)
         playerViewController = PlayerScrollViewController.instantiate(playerItem: AVPlayerItem(asset: asset), layers: nil)
-
+        
         add(playerViewController, to: view)
     }
-
-
+    
+    
 }
 
 

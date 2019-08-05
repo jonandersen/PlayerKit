@@ -44,6 +44,14 @@ public class PlayerScrollViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    public func pause(){
+        playerViewController?.player.pause()
+    }
+    
+    public func play(){
+        playerViewController?.player.play()
+    }
+    
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playerViewController.player.pause()

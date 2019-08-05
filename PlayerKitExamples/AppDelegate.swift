@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  PlayerKit-Demo
+//  PlayerKitExamples
 //
-//  Created by Jon Andersen on 7/21/19.
-//  Copyright © 2019 Norse Ventures LLC. All rights reserved.
+//  Created by Jon Andersen on 8/4/19.
+//  Copyright © 2019 Jon Andersen. All rights reserved.
 //
 
 import UIKit
