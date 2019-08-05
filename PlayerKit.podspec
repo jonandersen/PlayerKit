@@ -30,9 +30,9 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'PlayerKit/PlayerKit/Classes/**/*'
-  s.resources = ['PlayerKit/PlayerKit/Assets/*.xcassets',
-	'PlayerKit/PlayerKit/Assets/*.storyboard']
+  s.source_files = 'PlayerKit/Classes/**/*'
+  s.resources = ['PlayerKit/Assets/*.xcassets',
+	'PlayerKit/Assets/*.storyboard']
 	
   # s.resource_bundles = {
   #   'PlayerKit' =>
