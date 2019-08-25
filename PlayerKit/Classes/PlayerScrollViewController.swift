@@ -19,6 +19,17 @@ public class PlayerScrollViewController: UIViewController {
     private var playerViewController: PlayerViewController!
     private var playerItem: AVPlayerItem!
 
+    public var tapToPause: Bool = false {
+        didSet {
+            playerViewController.tapToPause = tapToPause
+        }
+    }
+    public var showOverlay: Bool = true {
+        didSet {
+            playerViewController.showOverlay = showOverlay
+        }
+    }
+
     
     public static func instantiate(playerItem: AVPlayerItem, layers: OverlayLayer?) -> PlayerScrollViewController {
         let viewController = UIStoryboard(name: "PlayerKit", bundle: bundle).instantiateViewController(withIdentifier: "PlayerScrollViewController") as! PlayerScrollViewController

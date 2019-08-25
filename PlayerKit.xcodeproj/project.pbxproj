@@ -27,6 +27,8 @@
 		059DAC5022F7CA87004854BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 059DAC4E22F7CA87004854BC /* Main.storyboard */; };
 		059DAC5222F7CA88004854BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 059DAC5122F7CA88004854BC /* Assets.xcassets */; };
 		059DAC5522F7CA88004854BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 059DAC5322F7CA88004854BC /* LaunchScreen.storyboard */; };
+		05FE2E3D2312F4AF007E842E /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0541ED5B22E4D0B600D5CA0B /* PlayerKit.framework */; };
+		05FE2E3E2312F4AF007E842E /* PlayerKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0541ED5B22E4D0B600D5CA0B /* PlayerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +39,28 @@
 			remoteGlobalIDString = 0541ED5A22E4D0B600D5CA0B;
 			remoteInfo = PlayerKit;
 		};
+		05FE2E3F2312F4AF007E842E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0541ED5222E4D0B600D5CA0B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0541ED5A22E4D0B600D5CA0B;
+			remoteInfo = PlayerKit;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		05FE2E412312F4AF007E842E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				05FE2E3E2312F4AF007E842E /* PlayerKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0541ED5B22E4D0B600D5CA0B /* PlayerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05FE2E3D2312F4AF007E842E /* PlayerKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,10 +253,12 @@
 				059DAC4422F7CA87004854BC /* Sources */,
 				059DAC4522F7CA87004854BC /* Frameworks */,
 				059DAC4622F7CA87004854BC /* Resources */,
+				05FE2E412312F4AF007E842E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				05FE2E402312F4AF007E842E /* PBXTargetDependency */,
 			);
 			name = PlayerKitExamples;
 			productName = PlayerKitExamples;
@@ -352,6 +378,11 @@
 			isa = PBXTargetDependency;
 			target = 0541ED5A22E4D0B600D5CA0B /* PlayerKit */;
 			targetProxy = 0541ED6622E4D0B700D5CA0B /* PBXContainerItemProxy */;
+		};
+		05FE2E402312F4AF007E842E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0541ED5A22E4D0B600D5CA0B /* PlayerKit */;
+			targetProxy = 05FE2E3F2312F4AF007E842E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -591,6 +622,7 @@
 		059DAC5722F7CA88004854BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4Y9CUSWE9;
@@ -610,6 +642,7 @@
 		059DAC5822F7CA88004854BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z4Y9CUSWE9;
