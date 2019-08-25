@@ -19,7 +19,24 @@ public protocol PlayerDelegate: class {
 public class Player: AVPlayer {
     public weak var delegate: PlayerDelegate?
 
-    @objc public dynamic var isPlaying: Bool = false
+    @objc public dynamic var isPlaying: Bool = false {
+        didSet {
+            if(isPlaying){
+                do {
+                    try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch {
+                    // Didn't work
+                }
+            } else {
+                do {
+                    try AVAudioSession.sharedInstance().setActive(false)
+                } catch {
+                    // Didn't work
+                }
+            }
+        }
+    }
     @objc public dynamic var isReadyToPlay: Bool = false
 
     private var trimPlaying: Bool = false

@@ -79,8 +79,8 @@ extension PlayerScrollViewController: PlayerDelegate, VideoThumbnailsViewControl
         }
     }
     
-    @objc public func playing(_: Bool) {
-    
+    @objc public func playing(_ playing: Bool) {
+        videoThumbnailsViewController.view.isUserInteractionEnabled = !playing
     }
     
     @objc public func shouldPlay() -> Bool {
