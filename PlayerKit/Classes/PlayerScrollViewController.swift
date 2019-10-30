@@ -16,7 +16,7 @@ public class PlayerScrollViewController: UIViewController {
     @IBOutlet weak var playerView: UIView!
  
     private let videoThumbnailsViewController = VideoThumbnailsViewController.instantiate()
-    private var playerViewController: PlayerViewController!
+    public var playerViewController: PlayerViewController!
     private var playerItem: AVPlayerItem!
 
     public var tapToPause: Bool = false {

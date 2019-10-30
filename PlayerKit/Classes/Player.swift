@@ -52,6 +52,7 @@ public class Player: AVPlayer {
 
     @objc public init(playerItem item: AVPlayerItem, autoPlay: Bool = false) {
         super.init(playerItem: item)
+        self.playerItem = item
         self.autoPlay = autoPlay
         configurePeriodicTimeObserving()
 
@@ -67,6 +68,7 @@ public class Player: AVPlayer {
     }
 
     deinit {
+
         playerItem = nil
         currentItem?.removeObserver(self, forKeyPath: "status", context: nil)
         NotificationCenter.default.removeObserver(self)
@@ -76,6 +78,16 @@ public class Player: AVPlayer {
         }
     }
 
+    @objc func didPlayToEnd(_: Notification) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: currentItem)
+        guard let item = playerItem else {
+            return
+        }
+        replaceCurrentItem(with: item)
+        seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        delegate?.moveToTime(startTime)
+        delegate?.timeChanged(startTime)
+    }
     @objc func pause(_: Notification) {
         seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         delegate?.moveToTime(startTime)
@@ -85,21 +97,14 @@ public class Player: AVPlayer {
 
     private func configurePeriodicTimeObserving() {
         let mainQueue = DispatchQueue.main
-        timeObserver = addPeriodicTimeObserver(forInterval: CMTimeMake(value: 33, timescale: 1000), queue: mainQueue, using: { [weak self] (currentTime) -> Void in
+        timeObserver = addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: mainQueue, using: { [weak self] (currentTime) -> Void in
             guard let self = self else {
                 return
             }
             let time: CGFloat = CGFloat(CMTimeGetSeconds(currentTime))
-            if self.isPlaying {
+            if self.isPlaying{
                 self.delegate?.moveToTime(time)
                 self.delegate?.timeChanged(time)
-            }
-            if self.trimPlaying, time >= self.endTime {
-                let moveTo = self.startTime
-                self.pause()
-                self.seek(to: CMTimeMakeWithSeconds(Float64(moveTo), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-                self.delegate?.moveToTime(moveTo)
-                self.delegate?.timeChanged(moveTo)
             }
         }) as AnyObject?
     }
@@ -123,6 +128,25 @@ public class Player: AVPlayer {
         if isPlaying {
             pause()
             return
+        }
+        guard let asset = playerItem?.asset else {
+            return
+        }
+        do {
+            let comp = AVMutableComposition()
+            let _ = comp.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)!
+            let _ = comp.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!
+            let startTime = CMTimeMakeWithSeconds(Float64(start), preferredTimescale: Int32(NSEC_PER_SEC))
+            let duration = CMTimeMakeWithSeconds(Float64(end - start), preferredTimescale: Int32(NSEC_PER_SEC))
+            let range = CMTimeRangeMake(start: startTime, duration: duration)
+            let videoComp = AVVideoComposition(propertiesOf: asset)
+            try comp.insertTimeRange(range, of: asset, at: .zero)
+            let newItem = AVPlayerItem(asset: comp)
+            newItem.videoComposition = videoComp
+            replaceCurrentItem(with: newItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(didPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: newItem)
+        } catch let e {
+            NSLog("FAILED TO CREATE COMPOSTION! \(e)")
         }
         startTime = start
         endTime = end

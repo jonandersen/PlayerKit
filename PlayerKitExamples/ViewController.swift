@@ -12,19 +12,26 @@ import AVFoundation
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var button: UIButton!
     var playerViewController: PlayerScrollViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        let asset = AVURLAsset(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")!)
+        let url = URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")!
+//        let url = Bundle.main.url(forResource: "IMG_8039", withExtension: "MOV")!
+        let asset = AVURLAsset(url: url)
         playerViewController = PlayerScrollViewController.instantiate(playerItem: AVPlayerItem(asset: asset), layers: nil)
         playerViewController.showOverlay = false
         playerViewController.tapToPause = true
         add(playerViewController, to: view)
+        view.bringSubviewToFront(button)
     }
     
+    @IBAction func playSection(_ sender: Any) {
+        playerViewController.playerViewController.player.playSection(0.33, end: 1.33)
+    }
     
 }
 
