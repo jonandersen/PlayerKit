@@ -83,11 +83,11 @@ public class Player: AVPlayer {
         guard let item = playerItem else {
             return
         }
-        pause()
         replaceCurrentItem(with: item)
         seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         delegate?.moveToTime(startTime)
         delegate?.timeChanged(startTime)
+        pause()
     }
     @objc func pause(_: Notification) {
         seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
