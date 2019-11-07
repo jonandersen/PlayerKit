@@ -64,13 +64,12 @@ public class Player: AVPlayer {
         //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { () -> Void in
         //            self.playButton.isHidden = false
         //        }
-        currentItem?.addObserver(self, forKeyPath: "status", options: [], context: nil)
+        playerItem?.addObserver(self, forKeyPath: "status", options: [], context: nil)
     }
 
     deinit {
-
+        playerItem?.removeObserver(self, forKeyPath: "status", context: nil)
         playerItem = nil
-        currentItem?.removeObserver(self, forKeyPath: "status", context: nil)
         NotificationCenter.default.removeObserver(self)
         if let timeObserver = self.timeObserver {
             removeTimeObserver(timeObserver)
