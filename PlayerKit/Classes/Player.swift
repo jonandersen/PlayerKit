@@ -39,7 +39,6 @@ public class Player: AVPlayer {
     }
     @objc public dynamic var isReadyToPlay: Bool = false
 
-    private var trimPlaying: Bool = false
     private var endTime: CGFloat = 0.0
     private var startTime: CGFloat = 0.0
     private var timeObserver: AnyObject?
@@ -61,9 +60,6 @@ public class Player: AVPlayer {
         NotificationCenter.default.addObserver(self, selector: #selector(pause(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
         NotificationCenter.default.addObserver(self, selector: #selector(pause(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: item)
         NotificationCenter.default.addObserver(self, selector: #selector(pause(_:)), name: NSNotification.Name.AVPlayerItemPlaybackStalled, object: item)
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { () -> Void in
-        //            self.playButton.isHidden = false
-        //        }
         playerItem?.addObserver(self, forKeyPath: "status", options: [], context: nil)
     }
 
@@ -77,21 +73,11 @@ public class Player: AVPlayer {
         }
     }
 
-    @objc func didPlayToEnd(_: Notification) {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: currentItem)
-        guard let item = playerItem else {
-            return
-        }
-        replaceCurrentItem(with: item)
-        seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-        delegate?.moveToTime(startTime)
-        delegate?.timeChanged(startTime)
-        pause()
-    }
     @objc func pause(_: Notification) {
         seek(to: CMTimeMakeWithSeconds(Float64(startTime), preferredTimescale: 60), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         delegate?.moveToTime(startTime)
         delegate?.timeChanged(startTime)
+        currentItem?.forwardPlaybackEndTime = .invalid
         pause()
     }
 
@@ -129,28 +115,9 @@ public class Player: AVPlayer {
             pause()
             return
         }
-        guard let asset = playerItem?.asset else {
-            return
-        }
-        do {
-            let comp = AVMutableComposition()
-            let _ = comp.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)!
-            let _ = comp.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)!
-            let startTime = CMTimeMakeWithSeconds(Float64(start), preferredTimescale: Int32(NSEC_PER_SEC))
-            let duration = CMTimeMakeWithSeconds(Float64(end - start), preferredTimescale: Int32(NSEC_PER_SEC))
-            let range = CMTimeRangeMake(start: startTime, duration: duration)
-            let videoComp = AVVideoComposition(propertiesOf: asset)
-            try comp.insertTimeRange(range, of: asset, at: .zero)
-            let newItem = AVPlayerItem(asset: comp)
-            newItem.videoComposition = videoComp
-            replaceCurrentItem(with: newItem)
-            NotificationCenter.default.addObserver(self, selector: #selector(didPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: newItem)
-        } catch let e {
-            NSLog("FAILED TO CREATE COMPOSTION! \(e)")
-        }
+        currentItem?.forwardPlaybackEndTime = CMTimeMakeWithSeconds(Float64(end), preferredTimescale: Int32(NSEC_PER_SEC))
         startTime = start
         endTime = end
-        trimPlaying = true
         play()
     }
 
@@ -164,7 +131,6 @@ public class Player: AVPlayer {
 
     public override func pause() {
         super.pause()
-        trimPlaying = false
         isPlaying = false
         delegate?.playing(false)
     }
