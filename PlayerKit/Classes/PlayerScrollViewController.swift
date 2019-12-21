@@ -66,6 +66,21 @@ public class PlayerScrollViewController: UIViewController {
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playerViewController.player.pause()
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            // Didn't work
+        }
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            // Didn't work
+        }
     }
 }
 
