@@ -130,8 +130,8 @@ public class Player: AVPlayer {
     }
 
     public override func pause() {
-        super.pause()
         isPlaying = false
+        super.pause()
         delegate?.playing(false)
     }
 
