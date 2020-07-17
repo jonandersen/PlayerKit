@@ -76,7 +76,7 @@ public class PlayerScrollViewController: UIViewController {
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         do {
-			try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .moviePlayback, options: .mixWithOthers)
+			try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: .interruptSpokenAudioAndMixWithOthers)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             // Didn't work
